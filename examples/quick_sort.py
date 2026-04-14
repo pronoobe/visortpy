@@ -33,5 +33,7 @@ create_video(
     bar_color="#3498db",
     highlight_compare="#e74c3c",
     highlight_swap="#2ecc71",
+    show_xaxis=True, 
+    show_yaxis=False
 )
 print(f"Done — {len(data.history)} steps recorded, sorted: {data.to_list()}")

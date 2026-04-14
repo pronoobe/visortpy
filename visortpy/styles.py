@@ -11,6 +11,8 @@ STYLES: Dict[str, Dict[str, Any]] = {
         "background": "#ffffff",
         "text_color": "#333333",
         "show_axes": True,
+        "show_xaxis": True,
+        "show_yaxis": True,
         "figsize": (10, 6),
     },
     "dark": {
@@ -21,6 +23,8 @@ STYLES: Dict[str, Dict[str, Any]] = {
         "background": "#1e1e1e",
         "text_color": "#cccccc",
         "show_axes": False,
+        "show_xaxis": False,
+        "show_yaxis": False,
         "figsize": (10, 6),
     },
     "sound": {
@@ -31,6 +35,8 @@ STYLES: Dict[str, Dict[str, Any]] = {
         "background": "#ffffff",
         "text_color": "#333333",
         "show_axes": True,
+        "show_xaxis": True,
+        "show_yaxis": True,
         "figsize": (10, 6),
         "sound_markers": True,
     },

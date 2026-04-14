@@ -18,6 +18,10 @@ Author / 作者: **pronoobe**
 - 生成带颜色高亮的 GIF / MP4 动画
 - Optional "final sweep" animation (bars turn green left-to-right)
 - 可选的"最终扫描"动画（柱状图从左到右依次变绿）
+- Independent X/Y axis visibility control
+- 独立控制 X/Y 坐标轴显示
+- Multi-process parallel rendering with progress bar
+- 多进程并行渲染，带进度条显示
 - Modular renderer architecture — easy to extend
 - 模块化渲染器架构，易于扩展
 
@@ -102,8 +106,39 @@ create_video(arr.history, output="sorted.gif", fps=8, final_sweep=True)
 | `bar_color` | `"#4a90d9"` | Default bar color / 默认柱状图颜色 |
 | `highlight_compare` | `"#e74c3c"` | Compare highlight (red) / 比较高亮色 |
 | `highlight_swap` | `"#2ecc71"` | Swap highlight (green) / 交换高亮色 |
+| `show_axes` | `True` | Show/hide both axes / 显示或隐藏所有坐标轴 |
+| `show_xaxis` | follows `show_axes` | Show/hide X axis (indices) / 显示或隐藏 X 轴 |
+| `show_yaxis` | follows `show_axes` | Show/hide Y axis (values) / 显示或隐藏 Y 轴 |
 | `final_sweep` | `False` | Enable final green sweep / 启用最终扫描动画 |
 | `sweep_color` | `"#2ecc71"` | Sweep bar color / 扫描动画颜色 |
+| `num_workers` | `1` | Parallel render processes / 并行渲染进程数 |
+| `show_progress` | `True` | Show tqdm progress bar / 显示进度条 |
+
+## Axis Control / 坐标轴控制
+
+```python
+# Hide X axis only / 只隐藏 X 轴
+create_video(arr.history, output="no_x.gif", show_xaxis=False)
+
+# Hide Y axis only / 只隐藏 Y 轴
+create_video(arr.history, output="no_y.gif", show_yaxis=False)
+
+# Hide both (same as show_axes=False) / 全部隐藏
+create_video(arr.history, output="clean.gif", show_axes=False)
+```
+
+## Parallel Rendering / 并行渲染
+
+Use `num_workers` to speed up rendering with multiple processes. A tqdm progress bar is shown by default.
+
+使用 `num_workers` 开启多进程并行渲染，加速生成。默认显示 tqdm 进度条。
+
+```python
+create_video(arr.history, output="fast.mp4", num_workers=4)
+
+# Disable progress bar / 关闭进度条
+create_video(arr.history, output="fast.mp4", num_workers=4, show_progress=False)
+```
 
 ## Architecture / 架构
 
