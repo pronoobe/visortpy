@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "visortpy"
+version = "1.0.0"
+description = "Visualize sorting algorithms with pure Python syntax / 用纯Python语法可视化排序算法"
+requires-python = ">=3.8"
+license = "MIT"
+authors = [{name = "pronoobe"}]
+readme = "README.md"
+keywords = ["sorting", "visualization", "algorithm", "animation", "education"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Topic :: Education",
+    "Topic :: Multimedia :: Graphics",
+]
+dependencies = ["matplotlib>=3.5"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.urls]
+Homepage = "https://github.com/pronoobe/visortpy"
+Repository = "https://github.com/pronoobe/visortpy"
+
+[tool.setuptools.packages.find]
+include = ["visortpy*"]
