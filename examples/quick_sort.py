@@ -14,10 +14,9 @@ def quicksort(arr: VisualArray, low: int, high: int) -> None:
 
 
 def partition(arr: VisualArray, low: int, high: int) -> int:
-    pivot = arr[high]  # READ recorded
     i = low - 1
     for j in range(low, high):
-        if arr[j] <= pivot:  # READ + comparison
+        if arr[j] <= arr[high]:  # READ + comparison
             i += 1
             arr.swap(i, j)
     arr.swap(i + 1, high)
@@ -27,21 +26,21 @@ def partition(arr: VisualArray, low: int, high: int) -> int:
 if __name__ == '__main__':
     import random
 
-    N = 200  # 数据长度（可以调到 100~200，看你机器性能）
+    N = 100  # 数据长度（可以调到 100~200，看你机器性能）
     data = [random.randint(1, 100) for _ in range(N)]
     data = VisualArray(data)
     quicksort(data, 0, len(data) - 1)
 
     create_video(
         data.history,
-        output="quick_sort.gif",
-        fps=60,
+        output="quick_sort.mp4",
+        fps=80,
         bar_color="#3498db",
         highlight_compare="#e74c3c",
         highlight_swap="#2ecc71",
         show_xaxis=False,
         show_yaxis=False,
         final_sweep=True,
-        num_workers=5
+        num_workers=15
     )
     print(f"Done — {len(data.history)} steps recorded, sorted: {data.to_list()}")

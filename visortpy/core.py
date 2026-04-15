@@ -8,6 +8,62 @@ from typing import Any, Dict, Iterable, Iterator, List, Optional, overload
 from .operations import OperationRecord, OperationType
 
 
+class _ElementProxy:
+    """Proxy returned by VisualArray.__getitem__ to auto-record comparisons."""
+
+    __slots__ = ("_value", "_index", "_owner")
+
+    def __init__(self, value: Any, index: int, owner: "VisualArray") -> None:
+        self._value = value
+        self._index = index
+        self._owner = owner
+
+    # -- unwrap helper --
+    @staticmethod
+    def _unbox(obj: Any) -> Any:
+        return obj._value if isinstance(obj, _ElementProxy) else obj
+
+    def _cmp(self, other: Any, op: str) -> bool:
+        other_val = self._unbox(other)
+        result = getattr(self._value, op)(other_val)
+        if result is NotImplemented:
+            return result
+        # record COMPARE if the other side is also a proxy (both from the array)
+        if isinstance(other, _ElementProxy) and self._owner is other._owner:
+            cmp_result = (self._value > other_val) - (self._value < other_val)
+            self._owner._record(
+                OperationType.COMPARE,
+                [self._index, other._index],
+                [self._value, other_val],
+                meta={"result": cmp_result},
+            )
+        return result
+
+    def __gt__(self, other: Any) -> bool:  return self._cmp(other, "__gt__")
+    def __lt__(self, other: Any) -> bool:  return self._cmp(other, "__lt__")
+    def __ge__(self, other: Any) -> bool:  return self._cmp(other, "__ge__")
+    def __le__(self, other: Any) -> bool:  return self._cmp(other, "__le__")
+    def __eq__(self, other: Any) -> bool:  return self._cmp(other, "__eq__")
+    def __ne__(self, other: Any) -> bool:  return self._cmp(other, "__ne__")
+
+    # -- arithmetic / hashing so the proxy is transparent --
+    def __hash__(self) -> int:       return hash(self._value)
+    def __int__(self) -> int:        return int(self._value)
+    def __float__(self) -> float:    return float(self._value)
+    def __repr__(self) -> str:       return repr(self._value)
+    def __str__(self) -> str:        return str(self._value)
+    def __add__(self, other: Any):   return self._value + self._unbox(other)
+    def __radd__(self, other: Any):  return self._unbox(other) + self._value
+    def __sub__(self, other: Any):   return self._value - self._unbox(other)
+    def __rsub__(self, other: Any):  return self._unbox(other) - self._value
+    def __mul__(self, other: Any):   return self._value * self._unbox(other)
+    def __rmul__(self, other: Any):  return self._unbox(other) * self._value
+    def __neg__(self):               return -self._value
+    def __pos__(self):               return +self._value
+    def __abs__(self):               return abs(self._value)
+    def __bool__(self) -> bool:      return bool(self._value)
+
+
 class VisualArray:
     """A list wrapper that transparently records every access and mutation.
 
@@ -100,9 +156,12 @@ class VisualArray:
         if isinstance(index, int):
             idx = index if index >= 0 else len(self._data) + index
             self._record(OperationType.READ, [idx], [value])
+            return _ElementProxy(value, idx, self)
         return value
 
     def __setitem__(self, index: int, value: Any) -> None:
+        if isinstance(value, _ElementProxy):
+            value = value._value
         if isinstance(index, int):
             idx = index if index >= 0 else len(self._data) + index
             self._data[index] = value
@@ -136,6 +195,8 @@ class VisualArray:
         return result
 
     def append(self, value: Any) -> None:
+        if isinstance(value, _ElementProxy):
+            value = value._value
         self._data.append(value)
         idx = len(self._data) - 1
         self._record(OperationType.WRITE, [idx], [value])
