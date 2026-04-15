@@ -31,6 +31,24 @@ Author / 作者: **pronoobe**
 pip install visortpy
 ```
 
+生成 MP4 视频需要系统安装 ffmpeg：
+
+```bash
+# macOS
+brew install ffmpeg
+
+# Ubuntu / Debian
+sudo apt install ffmpeg
+
+# Windows (scoop)
+scoop install ffmpeg
+
+# Windows (choco)
+choco install ffmpeg
+```
+
+如果只生成 GIF，则不需要 ffmpeg。
+
 ## Quick Start / 快速开始
 
 ### Bubble Sort / 冒泡排序
