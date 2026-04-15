@@ -28,28 +28,28 @@ def heap_sort(arr):
     for i in range(n - 1, 0, -1):
         arr.swap(0, i)
         heapify(arr, i, 0)
+if __name__ == '__main__':
+    # ========= 随机数据 =========
+    N = 10  # 数据长度（可以调到 100~200，看你机器性能）
+    data_list = [random.randint(1, 100) for _ in range(N)]
 
-# ========= 随机数据 =========
-N = 100  # 数据长度（可以调到 100~200，看你机器性能）
-data_list = [random.randint(1, 100) for _ in range(N)]
+    arr = VisualArray(data_list)
 
-arr = VisualArray(data_list)
+    heap_sort(arr)
 
-heap_sort(arr)
+    # ========= 可视化 =========
+    create_video(
+        arr.history,
+        output="heap_sort_dark.gif",
+        fps=10,                     # 高帧率更丝滑
+        style="dark",               # 黑底
+        bar_color="#ffffff",        # 白色柱子
+        highlight_compare="#888888",# 比较：灰色（低调）
+        highlight_swap="#ffffff",   # swap：保持白色（极简）
+        final_sweep=True,
+        sweep_color="#0000ee",
+        show_xaxis=False,
+        show_yaxis=False,
+        num_workers=10,
 
-# ========= 可视化 =========
-create_video(
-    arr.history,
-    output="heap_sort_dark.gif",
-    fps=30,                     # 高帧率更丝滑
-    style="dark",               # 黑底
-    bar_color="#ffffff",        # 白色柱子
-    highlight_compare="#888888",# 比较：灰色（低调）
-    highlight_swap="#ffffff",   # swap：保持白色（极简）
-    final_sweep=True,
-    sweep_color="#ffffff",
-    show_xaxis=True,
-    show_yaxis=False,
-    num_workers=10
-
-)
+    )

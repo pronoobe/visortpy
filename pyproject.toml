@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "visortpy"
-version = "1.0.0"
+version = "1.1.0"
 description = "Visualize sorting algorithms with pure Python syntax / 用纯Python语法可视化排序算法"
 requires-python = ">=3.8"
 license = "MIT"
