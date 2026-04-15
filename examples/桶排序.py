@@ -54,8 +54,10 @@ def bucket_sort(arr: VisualArray):
 
 # -------------------- 运行示例 --------------------
 if __name__ == "__main__":
+    import random
     # 创建测试数据
-    data = [29, 10, 14, 37, 13, 42, 7, 21, 18, 33]
+    N = 50  # 数据长度（可以调到 100~200，看你机器性能）
+    data = [random.randint(1, 100) for _ in range(N)]
 
     # 用 VisualArray 包装数据，启用操作记录
     arr = VisualArray(data)
@@ -67,11 +69,11 @@ if __name__ == "__main__":
     create_video(
         arr.history,                 # 操作历史记录
         output="bucket_sort.gif",    # 输出文件名（支持 .mp4 / .gif）
-        fps=4,                       # 帧率
+        fps=50,                       # 帧率
         style="default",             # 可选 "dark" 或自定义颜色
         final_sweep=True,            # 排序完成后，从左到右扫一遍绿色
         show_axes=True,              # 显示坐标轴
-        num_workers=2,               # 并行渲染加速（根据 CPU 核心数调整）
+        num_workers=4,               # 并行渲染加速（根据 CPU 核心数调整）
         show_progress=True           # 显示进度条
     )
 

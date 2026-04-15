@@ -1,5 +1,6 @@
 """Quick sort visualization example."""
 import sys, os
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from visortpy import VisualArray, create_video
@@ -23,17 +24,24 @@ def partition(arr: VisualArray, low: int, high: int) -> int:
     return i + 1
 
 
-data = VisualArray([38, 27, 43, 3, 9, 82, 10])
-quicksort(data, 0, len(data) - 1)
+if __name__ == '__main__':
+    import random
 
-create_video(
-    data.history,
-    output="quick_sort.gif",
-    fps=6,
-    bar_color="#3498db",
-    highlight_compare="#e74c3c",
-    highlight_swap="#2ecc71",
-    show_xaxis=True, 
-    show_yaxis=False
-)
-print(f"Done — {len(data.history)} steps recorded, sorted: {data.to_list()}")
+    N = 200  # 数据长度（可以调到 100~200，看你机器性能）
+    data = [random.randint(1, 100) for _ in range(N)]
+    data = VisualArray(data)
+    quicksort(data, 0, len(data) - 1)
+
+    create_video(
+        data.history,
+        output="quick_sort.gif",
+        fps=60,
+        bar_color="#3498db",
+        highlight_compare="#e74c3c",
+        highlight_swap="#2ecc71",
+        show_xaxis=False,
+        show_yaxis=False,
+        final_sweep=True,
+        num_workers=5
+    )
+    print(f"Done — {len(data.history)} steps recorded, sorted: {data.to_list()}")
